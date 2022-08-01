@@ -29,18 +29,117 @@ function Game({
     [2, 4, 6],
   ]
 
+  const handleResultValidation = (gameStateCopy) => {
+    let roundWon = false
+    for (let i = 0; i <= 7; i++) {
+      const winCondition = winningConditions[i]
+
+      let a = gameStateCopy[winCondition[0]]
+      let b = gameStateCopy[winCondition[1]]
+      let c = gameStateCopy[winCondition[2]]
+      if (a === "" || b === "" || c === "") {
+        continue
+      }
+      if (a === b && b === c) {
+        setModalActive([true, playerTurn])
+        roundWon = true
+        break
+      }
+    }
+    if (roundWon) {
+      setGameActive(false)
+      let resultsCopy = [...results]
+      if (playerTurn === "x") {
+        resultsCopy[0] += 1
+        setResults(resultsCopy)
+      } else {
+        resultsCopy[2] += 1
+        setResults(resultsCopy)
+      }
+      return true
+    }
+    let roundDraw = !gameStateCopy.includes("")
+    if (roundDraw) {
+      setGameActive(false)
+      setModalActive([true, "tie"])
+      let resultsCopy = [...results]
+      resultsCopy[1] += 1
+      setResults(resultsCopy)
+      return true
+    }
+    return false
+  }
+  const handleCpu = () => {
+    setTimeout(() => {
+      const newTurn = playerTurn === "o" ? "x" : "o"
+      setPlayerTurn(newTurn)
+      let freeIndexes = []
+      for (let i = 0; i < gameState.length; i++) {
+        if (gameState[i] === "" || gameState === undefined) {
+          freeIndexes.push(i)
+        }
+      }
+      let drawn = Math.floor(Math.random() * freeIndexes.length)
+
+      let gameStateCopy = [...gameState]
+      gameStateCopy[freeIndexes[drawn]] = playerTurn
+      setGameState(gameStateCopy)
+      const finished = handleResultValidation(gameStateCopy)
+      if (!finished) {
+        const newTurn = playerTurn === "o" ? "x" : "o"
+        setPlayerTurn(newTurn)
+      }
+    }, 1000)
+  }
+
+  const handleCellPlayed = (boxId) => {
+    let gameStateCopy = [...gameState]
+    gameStateCopy[boxId] = gameType === "player" ? playerTurn : playerMark
+    setGameState(gameStateCopy)
+    const finished = handleResultValidation(gameStateCopy)
+    if (!finished) {
+      const newTurn = playerTurn === "o" ? "x" : "o"
+      setPlayerTurn(newTurn)
+    }
+  }
+
+  const handleClick = (boxId) => {
+    if (gameType === "cpu") {
+      if (gameState[boxId] !== "" || !gameActive || playerMark !== playerTurn) {
+        return
+      }
+    }
+    if (gameType === "player") {
+      if (gameState[boxId] !== "" || !gameActive) {
+        return
+      }
+    }
+
+    handleCellPlayed(boxId)
+  }
+
+  useEffect(() => {
+    if (playerTurn === playerMark || !gameActive || gameType === "player") {
+      return
+    }
+    handleCpu()
+  })
+
   let boxes = []
   for (let i = 0; i < 9; i++) {
     boxes.push(
       <Box
         key={i}
         boxId={i}
+        handleClick={handleClick}
         gameState={gameState}
         playerMark={playerMark}
         playerTurn={playerTurn}
+        gameType={gameType}
       />
     )
   }
+
   let turn = ""
   if (playerTurn === "x") {
     turn = (
