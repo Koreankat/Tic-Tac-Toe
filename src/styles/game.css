@@ -1,0 +1,257 @@
+.game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 460px;
+}
+
+.game.modalActive {
+  filter: blur(2px);
+}
+
+.top-panel {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  height: 52px;
+}
+.panel-logo {
+  align-self: center;
+  transform: translateY(2px);
+}
+.turn-info {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 48px;
+  background-color: #1f3641;
+  border-radius: 10px;
+  box-shadow: 0 4px #10212a;
+}
+.turn-info .svg-wrapper {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin-right: 14px;
+}
+.svg-wrapper svg {
+  transform-origin: 0 0;
+  transform: scale(0.3125);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.turn-info path {
+  fill: #a8bfc9;
+}
+
+.turn-info span {
+  text-transform: uppercase;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-weight: bold;
+  color: #a8bfc9;
+}
+
+.restart-button {
+  position: relative;
+  height: 48px;
+  width: 52px;
+  border-radius: 10px;
+  border: none;
+  background-color: #a8bfc9;
+  box-shadow: 0 4px #6b8997;
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.2s, box-shadow 0.1s;
+}
+
+.restart-button svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.restart-button:active {
+  box-shadow: 0 2px #6b8997;
+  transform: translateY(2px);
+}
+
+.restart-button:hover {
+  background-color: #dbe8ed;
+}
+
+.board {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(3, auto);
+  grid-gap: 28px 20px;
+  margin-bottom: 28px;
+}
+
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 132px;
+  background-color: #1f3641;
+  border-radius: 15px;
+  box-shadow: 0 8px #10212a;
+  cursor: pointer;
+}
+
+.box::after {
+  content: "";
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 64px;
+  height: 64px;
+  opacity: 0;
+  transition: 0.2s;
+}
+
+.box.x-player::after {
+  background-image: url("../../public/assets/icon-x-outline.svg");
+}
+.box.o-player::after {
+  background-image: url("../../public/assets/icon-o-outline.svg");
+}
+
+.box:hover::after {
+  opacity: 1;
+}
+.box.x-taken,
+.box.o-taken {
+  cursor: default;
+}
+
+.box.x-taken::after {
+  opacity: 1;
+  background-image: url("../../public/assets/icon-x.svg");
+}
+
+.box.o-taken::after {
+  opacity: 1;
+  background-image: url("../../public/assets/icon-o.svg");
+}
+
+.results {
+  width: 100%;
+  height: 72px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.results > div {
+  width: 140px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  background-color: #a8bfc9;
+  color: #1a2a33;
+}
+.results div span {
+  text-transform: uppercase;
+  font-weight: medium;
+  letter-spacing: 0.88px;
+  font-size: 14px;
+}
+
+.results div div {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.results > div.cross {
+  background-color: #31c3bd;
+}
+
+.results > div.circle {
+  background-color: #f2b137;
+}
+
+@media (max-width: 768px) {
+  .game {
+    width: 328px;
+    top: 28px;
+    transform: translate(-50%, 0);
+  }
+  .top-panel {
+    margin-bottom: 64px;
+    height: 40px;
+  }
+
+  .turn-info {
+    height: 36px;
+    width: 96px;
+    padding: 0 15px;
+    justify-content: space-between;
+  }
+
+  .turn-info .svg-wrapper {
+    position: relative;
+    width: 16px;
+    height: 16px;
+  }
+  .svg-wrapper svg {
+    transform-origin: 0 0;
+    transform: scale(0.25);
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .turn-info span {
+    font-size: 14px;
+  }
+  .restart-button {
+    height: 36px;
+    width: 40px;
+  }
+
+  .restart-button svg {
+    transform: scale(0.75) translate(calc(-50% - 2.5px), calc(-50% - 2.5px));
+  }
+  .board {
+    grid-gap: 20px 12px;
+  }
+  .box {
+    width: 96px;
+    height: 88px;
+  }
+  .box::after {
+    width: 40px;
+    height: 40px;
+  }
+
+  .results {
+    height: 64px;
+  }
+  .results > div {
+    width: 96px;
+  }
+  .results div span {
+    font-size: 12px;
+  }
+
+  .results div div {
+    font-size: 20px;
+  }
+}
